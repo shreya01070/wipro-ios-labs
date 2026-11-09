@@ -1,6 +1,6 @@
 import Foundation
 class BankAccount{
-  private var balanceAmount; Double
+  private var balanceAmount: Double
   private var history: [String] = []
   var balance: Double{
     return balanceAmount
