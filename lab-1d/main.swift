@@ -64,24 +64,24 @@ print("Result: \(processInput(emptyText))")
 print("Result: \(processInput(nil))")
 print("\n4. Optional Chaining and Nil Coalescing")
    let engineeringDept = Department(school: School(principalName: "Dr. Smith"))
-      let artsDept = Depatment(school: nil)
+      let artsDept = Department(school: nil)
       let principal1 = 
-      engineeringDept.school?.principalName??"Not assigned"
+      engineeringDept.school?.principalName ?? "Not assigned"
       let principal2 = 
-      artsDept.school?.principalName??"Not assigned"
+      artsDept.school?.principalName ?? "Not assigned"
 
       print("Engineering Department: \(principal1)")
       print("Arts Depatment: \(principal2)")
 
       print("\n5.User Profile")
-      let User1 = UserProfile(name: "alien",address: "123 xyz street",phone: nil)
-      let User2 = UserProfile(name: "trump",address: nil,phone: "555-1234")
+      let user1 = UserProfile(name: "alien",address: "123 xyz street",phone: nil)
+      let user2 = UserProfile(name: "trump",address: nil,phone: "555-1234")
       print("Name: \(user1.name)")
-      print("Address: \(user1.address??"Not provided")")
-      print("phone: \(user1.phone??"Not provided")")
+      print("Address: \(user1.address ?? "Not provided")")
+      print("phone: \(user1.phone ?? "Not provided")")
       print("Name: \(user2.name)")
-      print("Address: \(user2.address??"Not provided")")
-      print("phone: \(user2.phone??"Not provided")")
+      print("Address: \(user2.address ?? "Not provided")")
+      print("phone: \(user2.phone ?? "Not provided")")
       
       
       
