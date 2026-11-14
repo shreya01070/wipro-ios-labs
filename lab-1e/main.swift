@@ -96,10 +96,10 @@ func testClosure() {
 }
 // Main program
 
-print("Lab 1e Started")
+print("Lab 1e ")
 
 testCopy()
 testOwnership()
 testClosure()
 
-print("\nLab 1e Completed")
+
