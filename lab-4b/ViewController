@@ -1,0 +1,105 @@
+import UIKit
+
+class ViewController: UIViewController {
+
+    let welcomeLabel = UILabel()
+    let refreshLabel = UILabel()
+    let nextButton = UIButton(type: .system)
+
+    var refreshCount = 0
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        print("Home: View did load")
+
+        view.backgroundColor = .white
+        title = "Home Screen"
+
+        setupScreen()
+    }
+
+    // Called whenever the screen is about to appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        print("Home: View will appear")
+
+        refreshScreen()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        print("Home: View did appear")
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        print("Home: View will disappear")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        print("Home: View did disappear")
+    }
+
+    func setupScreen() {
+
+        welcomeLabel.text = "Welcome to Home Screen"
+        welcomeLabel.font = .systemFont(ofSize: 22)
+        welcomeLabel.textAlignment = .center
+
+        refreshLabel.textAlignment = .center
+        refreshLabel.font = .systemFont(ofSize: 16)
+
+        nextButton.setTitle("Go to Second Screen", for: .normal)
+        nextButton.titleLabel?.font = .systemFont(ofSize: 18)
+
+        nextButton.addTarget(
+            self,
+            action: #selector(openNextScreen),
+            for: .touchUpInside
+        )
+
+        let stack = UIStackView(arrangedSubviews: [
+            welcomeLabel,
+            refreshLabel,
+            nextButton
+        ])
+
+        stack.axis = .vertical
+        stack.spacing = 25
+        stack.alignment = .center
+        stack.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(stack)
+
+        NSLayoutConstraint.activate([
+            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+
+    // Lightweight refresh action
+    func refreshScreen() {
+
+        refreshCount += 1
+
+        refreshLabel.text = "Screen appeared \(refreshCount) times"
+
+        print("Home: Screen refreshed")
+    }
+
+    @objc func openNextScreen() {
+
+        let secondScreen = SecondViewController()
+
+        navigationController?.pushViewController(
+            secondScreen,
+            animated: true
+        )
+    }
+}
