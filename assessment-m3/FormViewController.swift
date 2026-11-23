@@ -19,7 +19,7 @@ class FormViewController: UIViewController {
         setupForm()
     }
 
-    // MARK: - Form UI
+    // Form UI
 
     private func setupForm() {
 
@@ -104,7 +104,7 @@ class FormViewController: UIViewController {
         ).isActive = true
     }
 
-    // MARK: - Form Validation
+    // Form Validation
 
     @objc private func submitForm() {
 
