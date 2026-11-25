@@ -339,9 +339,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let studentName = nameTextField.text?
             .trimmingCharacters(in: .whitespacesAndNewlines)
 
-        let displayedName = studentName?.isEmpty == false
-            ? studentName!
-            : "Not entered"
+        let displayedName = studentName.flatMap {
+      $0.isEmpty ? nil : $0
+      } ?? "Not entered"
 
         let enrollmentStatus = enrollmentSwitch.isOn
             ? "Enrolled"
