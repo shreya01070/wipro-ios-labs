@@ -1,7 +1,18 @@
 
 import SwiftUI
 
+// Registration Fields
+
+enum RegistrationField: Hashable {
+    case name
+    case email
+}
+
+// Content View
+
 struct ContentView: View {
+
+    // Form State
 
     @State private var name = ""
     @State private var email = ""
@@ -11,28 +22,31 @@ struct ContentView: View {
     @State private var message = ""
     @State private var registrationSuccessful = false
 
+    @FocusState private var focusedField: RegistrationField?
+
     var body: some View {
 
         NavigationStack {
             ScrollView {
 
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 24) {
 
-                    // Header
+                    //  Header
 
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 8) {
+
                         Text("Event Registration")
                             .font(.largeTitle)
                             .fontWeight(.bold)
 
-                        Text("Fill in your details to register for the event.")
+                        Text("Enter your details to register for the event.")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
 
                     // Personal Details
 
-                    VStack(alignment: .leading, spacing: 15) {
+                    VStack(alignment: .leading, spacing: 14) {
 
                         Text("Personal Details")
                             .font(.headline)
@@ -40,19 +54,23 @@ struct ContentView: View {
                         TextField("Enter your full name", text: $name)
                             .textFieldStyle(.roundedBorder)
                             .textContentType(.name)
+                            .textInputAutocapitalization(.words)
+                            .focused($focusedField, equals: .name)
                             .accessibilityIdentifier("registration.name")
 
                         TextField("Enter your email", text: $email)
                             .textFieldStyle(.roundedBorder)
                             .keyboardType(.emailAddress)
+                            .textContentType(.emailAddress)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
+                            .focused($focusedField, equals: .email)
                             .accessibilityIdentifier("registration.email")
                     }
 
                     // Event Details
 
-                    VStack(alignment: .leading, spacing: 15) {
+                    VStack(alignment: .leading, spacing: 16) {
 
                         Text("Event Details")
                             .font(.headline)
@@ -74,7 +92,9 @@ struct ContentView: View {
 
                     // Submit Button
 
-                    Button(action: submitRegistration) {
+                    Button {
+                        submitRegistration()
+                    } label: {
 
                         Text("Submit Registration")
                             .fontWeight(.semibold)
@@ -86,33 +106,52 @@ struct ContentView: View {
                     }
                     .accessibilityIdentifier("registration.submit")
 
-                    // Feedback Message
+                    // Feedback
 
                     if !message.isEmpty {
 
                         Text(message)
                             .font(.subheadline)
+                            .fontWeight(.medium)
                             .foregroundColor(
                                 registrationSuccessful ? .green : .red
                             )
+                            .fixedSize(horizontal: false, vertical: true)
                             .accessibilityIdentifier(
                                 registrationSuccessful
                                 ? "registration.success"
                                 : "registration.error"
                             )
                     }
-
                 }
                 .padding()
             }
             .navigationTitle("Register")
             .navigationBarTitleDisplayMode(.inline)
+
+            // Keyboard Toolbar
+
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+
+                    Spacer()
+
+                    Button("Done") {
+                        focusedField = nil
+                    }
+                    .accessibilityIdentifier(
+                        "registration.keyboard.done"
+                    )
+                }
+            }
         }
     }
 
-    // Registration Validation
+    // Registration Logic
 
     private func submitRegistration() {
+
+        focusedField = nil
 
         let cleanedName = name.trimmingCharacters(
             in: .whitespacesAndNewlines
@@ -122,19 +161,24 @@ struct ContentView: View {
             in: .whitespacesAndNewlines
         )
 
+        // Check whether the name is entered.
         guard !cleanedName.isEmpty else {
             showError("Please enter your name.")
             return
         }
 
+        // Check whether the email is valid.
         guard isValidEmail(cleanedEmail) else {
             showError("Please enter a valid email address.")
             return
         }
 
+        // Registration completed successfully.
         registrationSuccessful = true
         message = "Registration successful! Thank you, \(cleanedName)."
     }
+
+    // Email Validation
 
     private func isValidEmail(_ email: String) -> Bool {
 
@@ -148,14 +192,19 @@ struct ContentView: View {
               !parts[1].isEmpty,
               !email.contains(" "),
               parts[1].contains(".") else {
+
             return false
         }
 
         return true
     }
 
+    // Error Handling
+
     private func showError(_ text: String) {
+
         registrationSuccessful = false
         message = text
     }
 }
+
