@@ -11,47 +11,50 @@ struct CourseRowView: View {
 
         HStack(spacing: 12) {
 
-            // Course icon
-            ZStack {
+            NavigationLink(value: course) {
 
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.blue.opacity(0.12))
-                    .frame(width: 55, height: 55)
+                HStack(spacing: 12) {
 
-                Image(systemName: course.imageName)
-                    .font(.system(size: 23))
-                    .foregroundColor(.blue)
+                    Image(systemName: course.imageName)
+                        .font(.system(size: 25))
+                        .foregroundColor(.blue)
+                        .frame(width: 50, height: 50)
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(10)
+
+                    VStack(alignment: .leading, spacing: 5) {
+
+                        Text(course.name)
+                            .font(.headline)
+                            .foregroundColor(.primary)
+
+                        Text(course.category)
+                            .font(.caption)
+                            .foregroundColor(.blue)
+
+                        Text(course.instructor)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Spacer(minLength: 5)
+                }
             }
+            .buttonStyle(.plain)
 
-            // Course information
-            VStack(alignment: .leading, spacing: 5) {
-
-                Text(course.name)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-
-                Text(course.category)
-                    .font(.caption)
-                    .foregroundColor(.blue)
-
-                Text(course.instructor)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-
-            Spacer()
-
-            // Favourite button
             FavoriteButtonView(isFavorite: $isFavorite)
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, 5)
     }
 }
 
 #Preview {
-    CourseRowView(
-        course: Course.sampleCourses[0],
-        isFavorite: .constant(false)
-    )
-    .padding()
+    NavigationStack {
+        CourseRowView(
+            course: Course.sampleCourses[0],
+            isFavorite: .constant(false)
+        )
+        .padding()
+    }
 }
+
