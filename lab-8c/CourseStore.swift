@@ -18,16 +18,21 @@ class CourseStore: ObservableObject {
     }
 
     // Set a particular favourite value
-    func setFavorite(_ isFavorite: Bool, for courseID: Int) {
+    
+func setFavorite(_ isFavorite: Bool, for courseID: Int) {
 
-        guard let index = courses.firstIndex(where: {
-            $0.id == courseID
-        }) else {
-            return
-        }
-
-        courses[index].isFavorite = isFavorite
+    guard let index = courses.firstIndex(where: {
+        $0.id == courseID
+    }) else {
+        return
     }
+
+    var updatedCourse = courses[index]
+    updatedCourse.isFavorite = isFavorite
+
+    courses[index] = updatedCourse
+}
+
 
     // Get the current favourite status
     func isFavorite(_ courseID: Int) -> Bool {
