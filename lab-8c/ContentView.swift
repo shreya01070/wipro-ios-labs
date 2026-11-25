@@ -6,11 +6,11 @@ struct ContentView: View {
     // Shared course data
     @StateObject private var store = CourseStore()
 
-    // Local screen state
+    // Local state for search and filtering
     @State private var searchText = ""
     @State private var showFavoritesOnly = false
 
-    // Filter the course list
+    // Filter courses based on search text and favourite status
     private var filteredCourses: [Course] {
 
         store.courses.filter { course in
@@ -31,7 +31,7 @@ struct ContentView: View {
 
             VStack(spacing: 12) {
 
-                // Heading
+                // App heading
                 VStack(alignment: .leading, spacing: 6) {
 
                     Text("Course Explorer")
@@ -45,9 +45,12 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
 
-                // Favourite filter
-                Toggle("Show favourite courses only", isOn: $showFavoritesOnly)
-                    .padding(.horizontal)
+                // Show only favourite courses
+                Toggle(
+                    "Show favourite courses only",
+                    isOn: $showFavoritesOnly
+                )
+                .padding(.horizontal)
 
                 // Course list
                 List {
@@ -74,21 +77,6 @@ struct ContentView: View {
                                     trailing: 12
                                 )
                             )
-                            .background {
-
-                                NavigationLink(value: course) {
-                                    EmptyView()
-                                }
-                                .opacity(0)
-                            }
-                            .overlay {
-
-                                NavigationLink(value: course) {
-                                    EmptyView()
-                                }
-                                .opacity(0)
-                                .allowsHitTesting(false)
-                            }
                         }
                     }
                 }
@@ -101,6 +89,7 @@ struct ContentView: View {
             .navigationTitle("My Courses")
             .navigationBarTitleDisplayMode(.inline)
 
+            // Open the selected course details
             .navigationDestination(for: Course.self) { selectedCourse in
 
                 CourseDetailView(
@@ -111,7 +100,7 @@ struct ContentView: View {
         }
     }
 
-    // Create a binding connected to the shared store
+    // Create a binding connected to CourseStore
     private func favoriteBinding(for courseID: Int) -> Binding<Bool> {
 
         Binding(
@@ -124,7 +113,7 @@ struct ContentView: View {
         )
     }
 
-    // Message when no courses match the filter
+    // Empty state when no courses match
     private var emptyMessage: some View {
 
         VStack(spacing: 12) {
@@ -144,9 +133,11 @@ struct ContentView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 45)
         .listRowSeparator(.hidden)
+        .listRowBackground(Color.clear)
     }
 }
 
 #Preview {
     ContentView()
 }
+
